@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Domain.Shared;
 
 namespace Domain.Customers;
 
@@ -13,18 +13,5 @@ public sealed record Email
         Ensure.NotNullOrEmpty(value);
 
         return new Email(value);
-    }
-}
-
-public static class Ensure
-{
-    public static void NotNullOrEmpty(
-        string? value,
-        [CallerArgumentExpression("value")] string? paramName = null)
-    {
-        if (string.IsNullOrEmpty(value))
-        {
-            throw new ArgumentNullException(paramName);
-        }
     }
 }
