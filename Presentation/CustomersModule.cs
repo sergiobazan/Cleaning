@@ -18,14 +18,19 @@ public class CustomersModule : ICarterModule
 
             var result = await sender.Send(command);
 
-            return Results.Ok(result);
+            if (result.IsFailure) return Results.BadRequest(result.Error);
+
+            return Results.Ok(result.Value);
         });
 
         app.MapGet("/customers/{id:guid}", async (Guid id, ISender sender) =>
         {
             var query = new GetCustomerQuery(id);
             var result = await sender.Send(query);
-            return Results.Ok(result);
+
+            if (result.IsFailure) return Results.NotFound(result.Error);
+
+            return Results.Ok(result.Value);
         });
     }
 

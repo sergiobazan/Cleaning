@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Application.Customers.CreateCustomer;
 
-public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, CustomerCreatedResponse>
+public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Result<CustomerCreatedResponse>>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -15,24 +15,31 @@ public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustome
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<CustomerCreatedResponse> Handle(
+    public async Task<Result<CustomerCreatedResponse>> Handle(
         CreateCustomerCommand request, 
         CancellationToken cancellationToken)
     {
+
+        if (await _customerRepository.IsEmailAlreadyTakenAsync(request.customer.Email))
+        {
+            return Result.Failure<CustomerCreatedResponse>(CustomerErrors.AlreadyTaken(request.customer.Email));
+        }
+
         var customer = Customer.Create(
             new Name(request.customer.Name),
             Email.Create(request.customer.Email),
             new Phone(request.customer.Phone));
 
-        if (customer is null)
-        {
-            return null;
-        }
+        _customerRepository.Add(customer.Value);
 
-        _customerRepository.Add(customer);
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _unitOfWork.SaveChangesAsync();
+        var response = new CustomerCreatedResponse(
+            customer.Value.Id,
+            customer.Value.Name!.Value,
+            customer.Value.Email!.Value,
+            customer.Value.Phone!.Value);
 
-        return new CustomerCreatedResponse(customer.Id, customer.Name.Value, customer.Email.Value, customer.Phone.Value);
+        return Result.Success(response);
     }
 }

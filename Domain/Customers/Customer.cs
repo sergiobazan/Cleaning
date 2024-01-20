@@ -21,7 +21,7 @@ public class Customer : Entity
     public Email? Email { get; private set; }
     public Phone? Phone { get; private set; }
 
-    public static Customer Create(Name name, Email email, Phone phone)
+    public static Result<Customer> Create(Name name, Email email, Phone phone)
     {
         var customer = new Customer(Guid.NewGuid(), name, email, phone);
 

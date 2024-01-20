@@ -1,4 +1,5 @@
 ﻿using Domain.Customers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -18,5 +19,11 @@ internal class CustomerRepository : ICustomerRepository
     public async Task<Customer?> GetByIdAsync(Guid id)
     {
         return await _context.Set<Customer>().FindAsync(id);
+    }
+
+    public async Task<bool> IsEmailAlreadyTakenAsync(string email)
+    {
+        var customers = await _context.Set<Customer>().ToListAsync();
+        return customers.Any(customer => customer.Email!.Value == email);
     }
 }

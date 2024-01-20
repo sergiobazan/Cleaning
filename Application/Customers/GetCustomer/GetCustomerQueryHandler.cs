@@ -1,9 +1,10 @@
-﻿using Domain.Customers;
+﻿using Domain.Abstractions;
+using Domain.Customers;
 using MediatR;
 
 namespace Application.Customers.GetCustomer;
 
-public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, GetCustomerResponse>
+public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Result<GetCustomerResponse>>
 {
     private readonly ICustomerRepository _customerRepository;
 
@@ -12,7 +13,7 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
         _customerRepository = customerRepository;
     }
 
-    public async Task<GetCustomerResponse> Handle(
+    public async Task<Result<GetCustomerResponse>> Handle(
         GetCustomerQuery request, 
         CancellationToken cancellationToken)
     {
@@ -20,9 +21,10 @@ public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, 
 
         if (customer is null)
         {
-            throw new Exception($"Customer with {request.Id} not found");
+            return Result.Failure<GetCustomerResponse>(CustomerErrors.NotFound(request.Id));
         }
 
-        return new GetCustomerResponse(customer.Id, customer.Name.Value, customer.Email.Value, customer.Phone.Value);
+        var response = new GetCustomerResponse(customer.Id, customer.Name.Value, customer.Email.Value, customer.Phone.Value);
+        return Result.Success(response);
     }
 }
