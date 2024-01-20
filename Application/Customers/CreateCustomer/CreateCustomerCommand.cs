@@ -1,5 +1,4 @@
 ﻿using Application.Abstractions.Behavior.Messaging;
-using Domain.Abstractions;
 
 
 namespace Application.Customers.CreateCustomer;

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Application.Customers.GetCustomer;
-using FluentValidation;
 
 namespace Presentation;
 
@@ -21,7 +20,7 @@ public class CustomersModule : ICarterModule
 
             var result = await sender.Send(command);
 
-            return Results.Ok(result);
+            return Results.Ok(result.Value);
         });
 
         app.MapGet("/customers/{id:guid}", async (Guid id, ISender sender) =>

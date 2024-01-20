@@ -1,6 +1,5 @@
-﻿using Domain.Abstractions;
-using MediatR;
+﻿using Application.Abstractions.Behavior.Messaging;
 
 namespace Application.Customers.GetCustomer;
 
-public sealed record GetCustomerQuery(Guid Id) : IRequest<Result<GetCustomerResponse>>;
+public sealed record GetCustomerQuery(Guid Id) : IQuery<GetCustomerResponse>;

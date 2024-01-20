@@ -1,10 +1,10 @@
-﻿using Domain.Abstractions;
+﻿using Application.Abstractions.Behavior.Messaging;
+using Domain.Abstractions;
 using Domain.Customers;
-using MediatR;
 
 namespace Application.Customers.CreateCustomer;
 
-public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Result<CustomerCreatedResponse>>
+public sealed class CreateCustomerCommandHandler : ICommandHandler<CreateCustomerCommand, CustomerCreatedResponse>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IUnitOfWork _unitOfWork;
