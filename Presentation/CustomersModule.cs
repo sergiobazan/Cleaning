@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Application.Customers.GetCustomer;
+using FluentValidation;
 
 namespace Presentation;
 
@@ -12,15 +13,15 @@ public class CustomersModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/customers", async (CreateCustomerRequest request, ISender sender) =>
+        app.MapPost("/customers", async (
+            CreateCustomerRequest request,
+            ISender sender) =>
         {
             var command = new CreateCustomerCommand(request);
 
             var result = await sender.Send(command);
 
-            if (result.IsFailure) return Results.BadRequest(result.Error);
-
-            return Results.Ok(result.Value);
+            return Results.Ok(result);
         });
 
         app.MapGet("/customers/{id:guid}", async (Guid id, ISender sender) =>

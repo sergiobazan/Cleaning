@@ -19,12 +19,6 @@ public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustome
         CreateCustomerCommand request, 
         CancellationToken cancellationToken)
     {
-
-        if (await _customerRepository.IsEmailAlreadyTakenAsync(request.customer.Email))
-        {
-            return Result.Failure<CustomerCreatedResponse>(CustomerErrors.AlreadyTaken(request.customer.Email));
-        }
-
         var customer = Customer.Create(
             new Name(request.customer.Name),
             Email.Create(request.customer.Email),
