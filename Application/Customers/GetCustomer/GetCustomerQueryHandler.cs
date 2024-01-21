@@ -1,10 +1,10 @@
-﻿using Domain.Abstractions;
+﻿using Application.Abstractions.Behavior.Messaging;
+using Domain.Abstractions;
 using Domain.Customers;
-using MediatR;
 
 namespace Application.Customers.GetCustomer;
 
-public sealed class GetCustomerQueryHandler : IRequestHandler<GetCustomerQuery, Result<GetCustomerResponse>>
+public sealed class GetCustomerQueryHandler : IQueryHandler<GetCustomerQuery, GetCustomerResponse>
 {
     private readonly ICustomerRepository _customerRepository;
 

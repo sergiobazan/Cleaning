@@ -1,6 +1,6 @@
-﻿using Domain.Abstractions;
-using MediatR;
+﻿using Application.Abstractions.Behavior.Messaging;
+
 
 namespace Application.Customers.CreateCustomer;
 
-public sealed record CreateCustomerCommand(CreateCustomerRequest customer) : IRequest<Result<CustomerCreatedResponse>>;
+public sealed record CreateCustomerCommand(CreateCustomerRequest customer) : ICommand<CustomerCreatedResponse>;

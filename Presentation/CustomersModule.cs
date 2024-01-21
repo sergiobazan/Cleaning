@@ -12,13 +12,13 @@ public class CustomersModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/customers", async (CreateCustomerRequest request, ISender sender) =>
+        app.MapPost("/customers", async (
+            CreateCustomerRequest request,
+            ISender sender) =>
         {
             var command = new CreateCustomerCommand(request);
 
             var result = await sender.Send(command);
-
-            if (result.IsFailure) return Results.BadRequest(result.Error);
 
             return Results.Ok(result.Value);
         });
