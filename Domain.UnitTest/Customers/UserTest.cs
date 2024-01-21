@@ -33,7 +33,7 @@ public class UserTest
         var customer = Customer.Create(name, email, phone);
 
         // Assert
-        customer.DomainEvents.Should().ContainSingle()
+        customer.Value.DomainEvents.Should().ContainSingle()
             .Which.Should().BeOfType<CustomerCreatedDomainEvent>();
     }
 }
