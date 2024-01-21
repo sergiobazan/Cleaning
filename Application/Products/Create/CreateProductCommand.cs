@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Messaging;
+﻿using Application.Abstractions.Behavior.Messaging;
 
 namespace Application.Products.Create;
 
