@@ -12,7 +12,7 @@ public abstract class Entity
         Id = id;
     }
 
-    public List<IDomainEvent> DomainEvents => _domainEvents.ToList();
+    protected List<IDomainEvent> DomainEvents => _domainEvents.ToList();
 
     protected void Raise(IDomainEvent domainEvent)
     {

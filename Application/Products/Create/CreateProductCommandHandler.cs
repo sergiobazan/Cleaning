@@ -23,13 +23,13 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
 
         if (result.IsFailure)
         {
-            return Result.Failure<Guid>(ProductErrors.PriceCurrencyError());
+            return Result.Failure<Guid>(result.Error);
         }
 
         _productRepository.Add(result.Value);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(result.Value.Id);
+        return result.Value.Id;
     }
 }

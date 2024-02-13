@@ -23,7 +23,6 @@ internal class CustomerRepository : ICustomerRepository
 
     public async Task<bool> IsEmailAlreadyTakenAsync(string email)
     {
-        var customers = await _context.Set<Customer>().ToListAsync();
-        return customers.Any(customer => customer.Email!.Value == email);
+        return await _context.Set<Customer>().AnyAsync(customer => customer.Email == Email.Create(email));
     }
 }

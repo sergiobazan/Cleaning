@@ -12,18 +12,18 @@ public class CustomersModule : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/customers", async (
-            CreateCustomerRequest request,
-            ISender sender) =>
-        {
-            var command = new CreateCustomerCommand(request);
+        app.MapPost("/customers", 
+            async (CreateCustomerRequest request, ISender sender) =>
+            {
+                var command = new CreateCustomerCommand(request);
 
-            var result = await sender.Send(command);
+                var result = await sender.Send(command);
 
-            return Results.Ok(result.Value);
-        });
+                return Results.Ok(result.Value);
+            });
 
-        app.MapGet("/customers/{id:guid}", async (Guid id, ISender sender) =>
+        app.MapGet("/customers/{id:guid}", 
+            async (Guid id, ISender sender) =>
         {
             var query = new GetCustomerQuery(id);
             var result = await sender.Send(query);
