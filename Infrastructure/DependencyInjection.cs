@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Domain.Products;
 using Domain.Orders;
+using Application.Abstractions.Data;
 
 namespace Infrastructure;
 
@@ -28,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<IOrderRepository, OrderRepository>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+        services.AddScoped<IApplicationDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
 
         return services;
     }

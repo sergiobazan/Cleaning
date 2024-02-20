@@ -3,17 +3,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-internal class CustomerRepository : ICustomerRepository
+internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-    private readonly ApplicationDbContext _context;
+   
     public CustomerRepository(ApplicationDbContext context)
+        : base(context)
     {
-        _context = context;
-    }
-
-    public void Add(Customer customer)
-    {
-        _context.Add(customer);
     }
 
     public async Task<Customer?> GetByIdAsync(Guid id)
