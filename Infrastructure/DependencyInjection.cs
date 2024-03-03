@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Domain.Products;
 using Domain.Orders;
 using Application.Abstractions.Data;
+using Infrastructure.Authentications;
 
 namespace Infrastructure;
 
@@ -27,6 +28,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

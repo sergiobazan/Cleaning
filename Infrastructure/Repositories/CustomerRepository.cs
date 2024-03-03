@@ -11,6 +11,11 @@ internal class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
     }
 
+    public async Task<Customer?> GetByEmailAsync(Email email)
+    {
+       return await _context.Set<Customer>().FirstOrDefaultAsync(c => c.Email == email);
+    }
+
     public async Task<Customer?> GetByIdAsync(Guid id)
     {
         return await _context.Set<Customer>().FindAsync(id);
