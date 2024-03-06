@@ -19,7 +19,7 @@ public sealed class GetCustomerQueryHandler : IQueryHandler<GetCustomerQuery, Ge
         GetCustomerQuery request, 
         CancellationToken cancellationToken)
     {
-        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == request.Id);
+        var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
         if (customer is null)
         {
