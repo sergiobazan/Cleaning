@@ -12,10 +12,15 @@ public abstract class Entity
         Id = id;
     }
 
-    protected List<IDomainEvent> DomainEvents => _domainEvents.ToList();
+    public List<IDomainEvent> DomainEvents => _domainEvents.ToList();
 
     protected void Raise(IDomainEvent domainEvent)
     {
         _domainEvents.Add(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        _domainEvents.Clear();
     }
 }
