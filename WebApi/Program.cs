@@ -3,6 +3,7 @@ using Carter;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Presentation;
+using WebApi.Extensions;
 using WebApi.Middleware;
 using WebApi.OptionsSetup;
 
@@ -32,6 +33,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
