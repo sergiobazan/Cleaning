@@ -27,27 +27,4 @@ public class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationDbContex
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-
-        var domainEvents = ChangeTracker.Entries<Entity>()
-            .Select(e => e.Entity)
-            .Where(e => e.DomainEvents.Any())
-            .SelectMany(e =>
-            {
-                List<IDomainEvent> domainEvent = e.DomainEvents;
-
-                e.ClearDomainEvents();
-
-                return domainEvent;
-            });
-
-        var result =  await base.SaveChangesAsync(cancellationToken);
-
-        foreach (var domainEvent in domainEvents)
-        {
-            await _publisher.Publish(domainEvent, cancellationToken);
-        }
-        return result;
-    }
 }
