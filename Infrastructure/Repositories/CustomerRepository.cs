@@ -3,17 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-internal class CustomerRepository : ICustomerRepository
+internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-    private readonly ApplicationDbContext _context;
+   
     public CustomerRepository(ApplicationDbContext context)
+        : base(context)
     {
-        _context = context;
     }
 
-    public void Add(Customer customer)
+    public async Task<Customer?> GetByEmailAsync(Email email)
     {
-        _context.Add(customer);
+       return await _context.Set<Customer>().FirstOrDefaultAsync(c => c.Email == email);
     }
 
     public async Task<Customer?> GetByIdAsync(Guid id)
@@ -23,7 +23,6 @@ internal class CustomerRepository : ICustomerRepository
 
     public async Task<bool> IsEmailAlreadyTakenAsync(string email)
     {
-        var customers = await _context.Set<Customer>().ToListAsync();
-        return customers.Any(customer => customer.Email!.Value == email);
+        return await _context.Set<Customer>().AnyAsync(customer => customer.Email == Email.Create(email));
     }
 }

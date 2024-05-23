@@ -1,10 +1,10 @@
-﻿using Domain.Abstractions;
+﻿using Application.Abstractions.Behavior.Messaging;
+using Domain.Abstractions;
 using Domain.Customers;
-using MediatR;
 
 namespace Application.Customers.CreateCustomer;
 
-public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, Result<CustomerCreatedResponse>>
+public sealed class CreateCustomerCommandHandler : ICommandHandler<CreateCustomerCommand, CustomerCreatedResponse>
 {
     private readonly ICustomerRepository _customerRepository;
     private readonly IUnitOfWork _unitOfWork;
@@ -19,12 +19,6 @@ public sealed class CreateCustomerCommandHandler : IRequestHandler<CreateCustome
         CreateCustomerCommand request, 
         CancellationToken cancellationToken)
     {
-
-        if (await _customerRepository.IsEmailAlreadyTakenAsync(request.customer.Email))
-        {
-            return Result.Failure<CustomerCreatedResponse>(CustomerErrors.AlreadyTaken(request.customer.Email));
-        }
-
         var customer = Customer.Create(
             new Name(request.customer.Name),
             Email.Create(request.customer.Email),

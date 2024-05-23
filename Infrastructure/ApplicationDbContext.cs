@@ -1,14 +1,25 @@
-﻿using Domain.Abstractions;
+﻿using Application.Abstractions.Data;
+using Domain.Abstractions;
+using Domain.Customers;
+using Domain.Orders;
+using Domain.Products;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
 
-public class ApplicationDbContext : DbContext, IUnitOfWork
+public class ApplicationDbContext : DbContext, IUnitOfWork, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+    private readonly IPublisher _publisher;
+
+    public DbSet<Order> Orders { get ; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<Product> Products { get; set; }
+
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IPublisher publisher)
         : base(options)
     {
-        
+        _publisher = publisher;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -16,16 +27,4 @@ public class ApplicationDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        try
-        {
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException("An exception ocurred ", ex);
-        }
-        
-    }
 }

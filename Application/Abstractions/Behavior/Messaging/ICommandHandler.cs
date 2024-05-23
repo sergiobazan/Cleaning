@@ -1,14 +1,13 @@
 ﻿using Domain.Abstractions;
 using MediatR;
 
-namespace Application.Abstractions.Messaging;
+namespace Application.Abstractions.Behavior.Messaging;
 
 public interface ICommandHandler<TCommand> : IRequestHandler<TCommand>
-    where TCommand : ICommand
+    where TCommand: ICommand
 {
 }
 
 public interface ICommandHandler<TCommand, TResponse> : IRequestHandler<TCommand, Result<TResponse>>
-    where TCommand : ICommand<TResponse>
-{
-}
+    where TCommand: ICommand<TResponse>
+{ }

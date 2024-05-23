@@ -10,7 +10,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .NotEmpty()
             .Must((product, _) =>
         {
-            return product.Currency.Length < 4 && !string.IsNullOrEmpty(product.Currency);
+            return product.Currency.Length < 4;
         }).WithMessage("Currency must be less than 4 characters");
 
         RuleFor(model => model.Amount)

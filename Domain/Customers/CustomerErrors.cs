@@ -9,4 +9,7 @@ public static class CustomerErrors
 
     public static Error AlreadyTaken(string email) => new(
         "Customers.AlreadyTaken", $"The customer with the Email = '{email}' is already taken");
+
+    public static Error InvalidCredentials => new(
+        "Customers.InvalidCredentials", "Invalid credentials. Please try again");
 }
