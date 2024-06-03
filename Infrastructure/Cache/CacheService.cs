@@ -12,7 +12,6 @@ internal class CacheService : ICacheService
         ContractResolver = new PrivateConstructorContractResolver(),
     };
 
-
     public CacheService(IDistributedCache cache)
     {
         _cache = cache;
@@ -41,7 +40,7 @@ internal class CacheService : ICacheService
         if (cacheEntity is null) return null;
 
         T? entity = JsonConvert.DeserializeObject<T>(cacheEntity, SerializerSettings);
-
+        
         return entity;
     }
 
@@ -52,4 +51,8 @@ internal class CacheService : ICacheService
        await _cache.SetStringAsync(cacheKey, JsonConvert.SerializeObject(value));
     }
 
+    public async Task RemoveAsync(string cacheKey)
+    {
+        await _cache.RemoveAsync(cacheKey);
+    }
 }
