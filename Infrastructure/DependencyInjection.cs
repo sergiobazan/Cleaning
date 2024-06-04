@@ -13,6 +13,7 @@ using Infrastructure.Authentications;
 using Infrastructure.Interceptor;
 using Quartz;
 using Infrastructure.BackgroundJobs;
+using Infrastructure.Cache;
 
 namespace Infrastructure;
 
@@ -30,7 +31,14 @@ public static class DependencyInjection
             options
                 .UseNpgsql(connectionString)
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>());
+                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>()!);
+        });
+
+        services.AddSingleton<ICacheService, CacheService>();
+
+        services.AddStackExchangeRedisCache(configure =>
+        {
+            configure.Configuration = configuration.GetConnectionString("Redis");
         });
 
         services.AddQuartz(configure =>
