@@ -1,5 +1,5 @@
-﻿using Domain.Customers;
-using Infrastructure.Cache;
+﻿using Application.Abstractions;
+using Domain.Customers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;

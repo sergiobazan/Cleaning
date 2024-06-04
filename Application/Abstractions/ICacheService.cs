@@ -1,6 +1,6 @@
-﻿namespace Infrastructure.Cache;
+﻿namespace Application.Abstractions;
 
-internal interface ICacheService
+public interface ICacheService
 {
     Task<T?> GetAsync<T>(string cacheKey) where T : class;
     Task SetAsync<T>(string cacheKey, T? value) where T : class;

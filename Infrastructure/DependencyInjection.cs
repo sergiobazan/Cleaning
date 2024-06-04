@@ -31,7 +31,7 @@ public static class DependencyInjection
             options
                 .UseNpgsql(connectionString)
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>());
+                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>()!);
         });
 
         services.AddSingleton<ICacheService, CacheService>();
