@@ -30,4 +30,11 @@ public class Customer : Entity
         return customer;
     }
 
+    public void Update(Name name, Email email, Phone phone)
+    {
+        Name = name;
+        Email = email;
+        Phone = phone;
+    }
+
 }

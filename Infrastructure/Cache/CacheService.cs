@@ -41,7 +41,7 @@ internal class CacheService : ICacheService
         if (cacheEntity is null) return null;
 
         T? entity = JsonConvert.DeserializeObject<T>(cacheEntity, SerializerSettings);
-        
+
         return entity;
     }
 

@@ -1,17 +1,13 @@
-﻿using Application.Abstractions;
-using Domain.Customers;
+﻿using Domain.Customers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-    private readonly ICacheService _cacheService;
-    public CustomerRepository(ApplicationDbContext context, ICacheService cacheService)
+    public CustomerRepository(ApplicationDbContext context)
         : base(context)
-    {
-        _cacheService = cacheService;
-    }
+    { }
 
     public async Task<Customer?> GetByEmailAsync(Email email)
     {
@@ -20,14 +16,9 @@ internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 
     public async Task<Customer?> GetByIdAsync(Guid id)
     {
-        return await _cacheService.GetAsync(
-            $"customer-{id}",
-            async () =>
-            {
-                return await _context
-                    .Set<Customer>()
-                    .FirstOrDefaultAsync(c => c.Id == id);
-            });
+        return await _context
+            .Set<Customer>()
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<bool> IsEmailAlreadyTakenAsync(string email)
