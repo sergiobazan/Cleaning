@@ -14,6 +14,7 @@ using Infrastructure.Interceptor;
 using Quartz;
 using Infrastructure.BackgroundJobs;
 using Infrastructure.Cache;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Infrastructure;
 
@@ -59,7 +60,13 @@ public static class DependencyInjection
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.AddScoped<IPermissionService, PermissionService>();
+
+        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

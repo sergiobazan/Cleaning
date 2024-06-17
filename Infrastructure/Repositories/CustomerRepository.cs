@@ -18,6 +18,7 @@ internal class CustomerRepository : Repository<Customer>, ICustomerRepository
     {
         return await _context
             .Set<Customer>()
+            .Include(c => c.Roles)
             .FirstOrDefaultAsync(c => c.Id == id);
     }
 

@@ -20,6 +20,7 @@ public class Customer : Entity
     public Name? Name { get; private set; }
     public Email? Email { get; private set; }
     public Phone? Phone { get; private set; }
+    public List<Role> Roles = new();
 
     public static Result<Customer> Create(Name name, Email email, Phone phone)
     {
@@ -37,4 +38,8 @@ public class Customer : Entity
         Phone = phone;
     }
 
+    public void AddRoles(Role role)
+    {
+        Roles.Add(role);
+    }
 }

@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Application.Customers.GetCustomer;
 using Application.Customers.Login;
-using Microsoft.AspNetCore.Authorization;
 using Application.Customers.Update;
+using Infrastructure.Authentications;
 
 namespace Presentation;
 
@@ -24,16 +24,17 @@ public class CustomersModule : ICarterModule
             return Results.Ok(result.Value);
         });
 
-        
-        app.MapGet("/customers/{id:guid}", async (Guid id, ISender sender) =>
-        {
-            var query = new GetCustomerQuery(id);
-            var result = await sender.Send(query);
+        app.MapGet("/customers/{id:guid}",
+            [HasPermission(Permission.Customer)]
+            async (Guid id, ISender sender) =>
+            {
+                var query = new GetCustomerQuery(id);
+                var result = await sender.Send(query);
 
-            if (result.IsFailure) return Results.NotFound(result.Error);
+                if (result.IsFailure) return Results.NotFound(result.Error);
 
-            return Results.Ok(result.Value);
-        }).RequireAuthorization();
+                return Results.Ok(result.Value);
+            }).RequireAuthorization();
 
         app.MapPut("/customers/{id:guid}", async (Guid id, UpdateCustomerRequest request, ISender sender) =>
         {
