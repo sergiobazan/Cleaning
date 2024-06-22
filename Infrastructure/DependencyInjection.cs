@@ -13,6 +13,8 @@ using Infrastructure.Authentications;
 using Infrastructure.Interceptor;
 using Quartz;
 using Infrastructure.BackgroundJobs;
+using Infrastructure.Cache;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Infrastructure;
 
@@ -30,7 +32,14 @@ public static class DependencyInjection
             options
                 .UseNpgsql(connectionString)
                 .UseSnakeCaseNamingConvention()
-                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>());
+                .AddInterceptors(sp.GetService<OutboxMessagesInterceptor>()!);
+        });
+
+        services.AddSingleton<ICacheService, CacheService>();
+
+        services.AddStackExchangeRedisCache(configure =>
+        {
+            configure.Configuration = configuration.GetConnectionString("Redis");
         });
 
         services.AddQuartz(configure =>
@@ -51,7 +60,13 @@ public static class DependencyInjection
         services.AddScoped<ICustomerRepository, CustomerRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.AddScoped<IPermissionService, PermissionService>();
+
+        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddSingleton<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

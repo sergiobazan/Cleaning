@@ -5,11 +5,9 @@ namespace Infrastructure.Repositories;
 
 internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 {
-   
     public CustomerRepository(ApplicationDbContext context)
         : base(context)
-    {
-    }
+    { }
 
     public async Task<Customer?> GetByEmailAsync(Email email)
     {
@@ -18,7 +16,10 @@ internal class CustomerRepository : Repository<Customer>, ICustomerRepository
 
     public async Task<Customer?> GetByIdAsync(Guid id)
     {
-        return await _context.Set<Customer>().FindAsync(id);
+        return await _context
+            .Set<Customer>()
+            .Include(c => c.Roles)
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
 
     public async Task<bool> IsEmailAlreadyTakenAsync(string email)
